@@ -250,7 +250,7 @@
       const jobsContainer = document.getElementById("jobsContainer");
       const agentMessage = document.getElementById("agentMessage");
 
-      // 2. Fetch Data from Python Backend AI Agent
+      // 2. Fetch Data from Live Render Python Backend AI Agent
       async function fetchAgentJobs() {
         jobsContainer.innerHTML =
           '<div class="status-message">🤖 AI Agent is thinking and analyzing your request...</div>';
@@ -260,7 +260,7 @@
 
         try {
           const response = await fetch(
-            `http://127.0.0.1:8000/api/jobs?prompt=${encodeURIComponent(userQuery)}`,
+            `https://agentic-ai-lglx.onrender.com/api/jobs?prompt=${encodeURIComponent(userQuery)}`,
           );
 
           if (!response.ok) {
@@ -277,9 +277,9 @@
         } catch (error) {
           jobsContainer.innerHTML = `
             <div class="status-message" style="color: #ef4444; border-color: #ef4444;">
-                <h3>⚠️ Cannot connect to the Python Backend.</h3>
+                <h3>⚠️ Cannot connect to the Cloud Backend.</h3>
                 <p style="font-size: 14px; color: #94a3b8; margin-top: 10px;">
-                    Make sure your FastAPI server is running on port 8000!
+                    Please check your internet connection or verify your Render service status.
                 </p>
             </div>
         `;
