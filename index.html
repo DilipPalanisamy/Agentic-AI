@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <script src="https://accounts.google.com/gsi/client" async></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 360px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, .2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: #007BFF;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .or {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+            color: gray;
+        }
+
+        .signup {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .signup a {
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+        }
+
+        .signup a:hover {
+            text-decoration: underline;
+        }
+
+        .g_id_signin {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>Login</h2>
+
+        <form>
+
+            <input type="email" placeholder="Enter Gmail" required>
+
+            <input type="password" placeholder="Enter Password" required>
+
+            <button type="submit">Login</button>
+
+        </form>
+
+        <div class="or">
+            ------------- OR -------------
+        </div>
+
+        <!-- Google Login -->
+
+        <div id="g_id_onload" data-client_id="985018230796-l4mivu7or4h81n86na3rpgu0c8ru53ot.apps.googleusercontent.com"
+            data-callback="handleCredentialResponse">
+        </div>
+
+        <div class="g_id_signin" data-type="standard" data-size="large">
+        </div>
+
+        <div class="signup">
+            Don't have an account?
+            <a href="create-account.html">Create Account</a>
+        </div>
+
+    </div>
+
+    <script>
+        function handleCredentialResponse(response) {
+
+            // Decode the Google JWT
+            const data = JSON.parse(atob(response.credential.split('.')[1]));
+
+            // Create a user object
+            let user = {
+                name: data.name,
+                email: data.email,
+                picture: data.picture
+            };
+
+            // Save as the logged-in user
+            localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+            // Redirect
+            window.location.href = "dashboard.html";
+        }
+        // Normal Login
+        document.querySelector("form").addEventListener("submit", function (e) {
+
+            e.preventDefault();
+
+            let email = document.querySelector("input[type=email]").value.trim();
+            let password = document.querySelector("input[type=password]").value;
+
+            if (email === "" || password === "") {
+                alert("Enter Email and Password");
+                return;
+            }
+
+            // Get user from Local Storage
+            let userData = localStorage.getItem(email);
+
+            // Check if account exists
+            if (userData === null) {
+                alert("Account not found! Please create an account.");
+                return;
+            }
+
+            // Convert JSON string to object
+            let user = JSON.parse(userData);
+
+            // Check password
+            if (user.password === password) {
+
+                alert("Login Successful");
+
+                // Save logged in user
+                localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+                // Redirect to dashboard
+                window.location.href = "dashboard.html";
+
+            } else {
+
+                alert("Incorrect Password");
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
